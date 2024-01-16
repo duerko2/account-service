@@ -19,10 +19,11 @@ public class AccountResource {
 	@Produces("application/json")
 	public Response registerAccount(Account account) {
 		try {
-			Account a = service.register(account);
-			return Response.ok(a).build();
+			return Response.ok(service.register(account).join()).build();
 		} catch (AccountAlreadyExists e) {
 			return Response.status(409).entity(account.getCpr()).build();
+		} catch (Exception e) {
+			return Response.status(500).build();
 		}
 	}
 	@GET

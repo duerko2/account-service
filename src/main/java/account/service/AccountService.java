@@ -9,7 +9,7 @@ import java.util.UUID;
 public class AccountService {
 
 	private MessageQueue queue;
-	private CompletableFuture<Account> registeredAccount;
+
 	AccountRepo accountRepo = new AccountRepo();
 	
 	public AccountService(MessageQueue q) {
@@ -18,50 +18,53 @@ public class AccountService {
 		queue.addHandler("PaymentRequestValidated", this::handleBankAccountsAssignmentRequest);
 	}
 
-	public Account register(Account s) throws AccountAlreadyExists {
+	public CompletableFuture<Account> register(Account requestedAccount) throws AccountAlreadyExists {
+		CompletableFuture<Account> registeredAccount = new CompletableFuture<>();
 
 		// check if account exists in repo
-		if(accountRepo.accountExists(s.getCpr())){
+		if(accountRepo.accountExists(requestedAccount.getCpr())){
 			throw new AccountAlreadyExists("Account already exists");
 		}
 
 
 		String newAccountNumber = UUID.randomUUID().toString();
-		s.setAccountId(newAccountNumber);
+		requestedAccount.setAccountId(newAccountNumber);
 
-		if(s.getType().getType().equals("customer")){
-			s = registerCustomerAccount(s);
+
+		if(requestedAccount.getType().getType().equals("customer")){
+			// Customer account gets stored as account request
+			accountRepo.storeAccountRequest(newAccountNumber,registeredAccount);
+			registerCustomerAccount(requestedAccount);
 		} else {
-			s = registerMerchantAccount(s);
+			// Merchant account gets stored right away in repo
+			registeredAccount.complete(registerMerchantAccount(requestedAccount));
+			accountRepo.storeAccount(requestedAccount);
 		}
-		accountRepo.storeAccount(s);
-		return s;
+
+		// Return the completable future to the resource (merchant is already completed)
+		return registeredAccount.orTimeout(5, java.util.concurrent.TimeUnit.SECONDS);
 	}
 
 	private Account registerMerchantAccount(Account s) {
 		return s;
 	}
 
-	private Account registerCustomerAccount(Account s) {
-		registeredAccount = new CompletableFuture<>();
+	private void registerCustomerAccount(Account s) {
 		Event event = new Event("InitialTokensRequested", new Object[] { s });
 		queue.publish(event);
-
-		return registeredAccount.join();
 	}
 
 	public void handleInitialTokensAssigned(Event e) {
 		var s = e.getArgument(0, Account.class);
+		accountRepo.getAccountRequest(s.getAccountId()).complete(s);
 		accountRepo.storeAccount(s);
-		registeredAccount.complete(s);
 	}
 
 	public void handleBankAccountsAssignmentRequest(Event e) {
 		var p = e.getArgument(0, Payment.class);
 		var customerBankId = accountRepo.getAccount(p.getCustomerId()).getBankId();
 		var merchantBankId = accountRepo.getAccount(p.getMerchantId()).getBankId();
-		System.out.println("Customer bank id: " + customerBankId);
-		System.out.println("Merchant bank id: " + merchantBankId);
+
 		p.setCustomerBankId(customerBankId);
 		p.setMerchantBankId(merchantBankId);
 
