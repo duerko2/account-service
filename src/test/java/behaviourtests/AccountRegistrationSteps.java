@@ -59,8 +59,7 @@ public class AccountRegistrationSteps {
 		new Thread(() -> {
 			Account result;
 			try {
-				result = service.register(account);
-				registeredAccount.complete(result);
+				registeredAccount = service.register(account);
 			} catch (AccountAlreadyExists e) {
 				throw new RuntimeException(e);
 			}
@@ -79,7 +78,7 @@ public class AccountRegistrationSteps {
 		c.setName(account.getName());
 		c.setLastname(account.getLastname());
 		c.setCpr(account.getCpr());
-		c.setAccountId("69420");
+		c.setAccountId(account.getAccountId());
 		c.setType(new AccountType("customer"));
 		List<Token> tokens = new ArrayList<>();
 		// adds 6 tokens to list
