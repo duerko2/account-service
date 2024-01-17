@@ -71,7 +71,7 @@ public class Account implements Serializable {
 		this.tokens = tokens;
 	}
 
-
+//hej med dig... beier suger røv
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof Account)) {
