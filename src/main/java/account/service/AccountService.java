@@ -50,7 +50,7 @@ public class AccountService {
 	}
 
 	private void registerCustomerAccount(Account s) {
-		Event event = new Event("InitialTokensRequested", new Object[] { s });
+		Event event = new Event("InitialTokensRequested", new Object[] { s,6 });
 		queue.publish(event);
 	}
 

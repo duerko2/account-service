@@ -66,9 +66,9 @@ public class AccountRegistrationSteps {
 		}).start();
 	}
 
-	@Then("the {string} event is sent")
-	public void theEventIsSent(String string) {
-		Event event = new Event(string, new Object[] { account });
+	@Then("the {string} event is sent asking for {int} tokens")
+	public void theEventIsSentAskingForTokens(String string,  int tokens) {
+		Event event = new Event(string, new Object[] { account ,tokens});
 		assertEquals(event,publishedEvent.join());
 	}
 	@When("the {string} event is sent with a list of {int} tokens")
