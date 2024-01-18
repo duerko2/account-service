@@ -20,12 +20,12 @@ public class AccountService {
 		this.accountRepo = accountRepo;
 		this.accountReadRepo = accountReadRepo;
 		queue.addHandler(TokensAssigned.class, e -> handleInitialTokensAssigned((TokensAssigned) e));
-//		queue.addHandler("PaymentRequestValidated", this::handleBankAccountsAssignmentRequest);
+		queue.addHandler(BankAccountRequest.class, e -> handleBankAccountsAssignmentRequest((BankAccountRequest) e));
 	}
 
-	public AccountId register(String firstName, String lastName, AccountType type, String cpr) throws AccountAlreadyExists {
+	public AccountId register(String firstName, String lastName, AccountType type, String cpr, String bankId) throws AccountAlreadyExists {
 
-		Account account = Account.createAccount(firstName,lastName,type,cpr);
+		Account account = Account.createAccount(firstName,lastName,type,cpr,bankId);
 
 		// check if account exists in repo
 		if(accountReadRepo.accountExists(account.getCpr())){
@@ -39,14 +39,8 @@ public class AccountService {
 		return account.getAccountId();
 	}
 
-	private Account registerMerchantAccount(Account s) {
-		return s;
-	}
 
-//	private void registerCustomerAccount(Account s) {
-//		Event event = new Event("InitialTokensRequested", new Object[] { s });
-//		//queue.publish(event);
-//	}
+
 
 	public void handleInitialTokensAssigned(TokensAssigned e) {
 		Account account = accountRepo.getAccount(e.getAccountId());
@@ -54,20 +48,20 @@ public class AccountService {
 		accountRepo.save(account);
 	}
 
-//	public void handleBankAccountsAssignmentRequest(Event e) {
-//		var p = e.getArgument(0, Payment.class);
-//		var customerBankId = accountRepo.getAccount(p.getCustomerId()).getBankId();
-//		var merchantBankId = accountRepo.getAccount(p.getMerchantId()).getBankId();
-//
-//		p.setCustomerBankId(customerBankId);
-//		p.setMerchantBankId(merchantBankId);
-//
-//		Event event = new Event("BankAccountsAssigned", new Object[] { p });
-//		queue.publish(event);
-//	}
+	public void handleBankAccountsAssignmentRequest(BankAccountRequest event) {
+		var customer = accountRepo.getAccount(event.getAccountId());
+		var merchant = accountRepo.getAccount(event.getMerchantId());
+
+		var customerEvent = new BankAccountAssigned(customer.getAccountId(),customer.getBankId());
+		var merchantEvent = new BankAccountAssigned(merchant.getAccountId(), merchant.getBankId());
+		queue.publish(customerEvent);
+		queue.publish(merchantEvent);
+
+	}
 
 	public void deleteAccount(AccountId accountId) {
 		accountRepo.deleteAccount(accountId);
+
 	}
 
 	public Account getAccount(AccountId accountId) {

@@ -74,7 +74,7 @@ public class AccountRegistrationSteps {
 		// step is executed.
 			Account result;
 			try {
-				accountId = service.register("Test","testing",new AccountType("Customer"),"cpr123123");
+				accountId = service.register("Test","testing",new AccountType("Customer"),"cpr123123","123123123123");
 				account = service.getAccount(accountId);
 			} catch (AccountAlreadyExists e) {
 				throw new RuntimeException(e);

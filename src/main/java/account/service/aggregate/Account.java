@@ -43,7 +43,7 @@ public class Account implements Serializable {
 	@Setter(AccessLevel.NONE)
 	private List<Event> appliedEvents = new ArrayList<Event>();
 
-	public static Account createAccount(String firstName, String lastName,AccountType type, String cpr) {
+	public static Account createAccount(String firstName, String lastName,AccountType type, String cpr,String bankId) {
 		var accountID = new AccountId(UUID.randomUUID());
 		AccountCreated event = new AccountCreated(accountID, firstName, lastName,type,cpr);
 		var account = new Account();
@@ -69,6 +69,10 @@ public class Account implements Serializable {
 			events.add(new AccountTokenAdded(accountId,token));
 		}
 		appliedEvents.addAll(events);
+
+	}
+	public void UpdateBankId(String bankId){
+
 
 	}
 
