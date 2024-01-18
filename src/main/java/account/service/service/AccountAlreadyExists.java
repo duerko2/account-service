@@ -1,4 +1,4 @@
-package account.service;
+package account.service.service;
 
 public class AccountAlreadyExists extends Exception {
 

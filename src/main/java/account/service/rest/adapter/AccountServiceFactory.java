@@ -1,6 +1,6 @@
 package account.service.rest.adapter;
 
-import account.service.AccountService;
+import account.service.service.AccountService;
 import messaging.MessageQueue;
 import messaging.implementations.RabbitMqQueue;
 
@@ -14,7 +14,7 @@ public class AccountServiceFactory {
 		if (service != null) {
 			return service;
 		}
-		service = new AccountService(mq);
+		//service = new AccountService(mq);
 		return service;
 	}
 
