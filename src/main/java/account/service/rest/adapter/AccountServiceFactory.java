@@ -1,20 +1,32 @@
 package account.service.rest.adapter;
 
+import account.service.repositories.AccountReadRepo;
+import account.service.repositories.AccountRepo;
 import account.service.service.AccountService;
 import messaging.MessageQueue;
 import messaging.implementations.RabbitMqQueue;
 
 public class AccountServiceFactory {
 	static AccountService service = null;
+	static AccountReadRepo accountReadRepo = null;
 
-	private final MessageQueue mq = new RabbitMqQueue("rabbitMq");
+	static AccountRepo accountRepo = null;
+	private final MessageQueue mq = new RabbitMqQueue("rabbitMq","topic");
 
 
 	public synchronized AccountService getService(){
 		if (service != null) {
 			return service;
 		}
-		//service = new AccountService(mq);
+		if(accountReadRepo == null)
+		{
+			accountReadRepo = new AccountReadRepo(mq);
+		}if(accountRepo == null)
+		{
+			accountRepo = new AccountRepo(mq);
+		}
+		service = new AccountService(mq,accountRepo,accountReadRepo);
+		System.out.printf("RabbitMQ created");
 		return service;
 	}
 

@@ -23,7 +23,7 @@ public class AccountResource {
 	@Produces("application/json")
 	public Response registerAccount(String firstName, String lastName, AccountType type, String cpr,String bankId) {
 		try {
-			return Response.ok(service.register(firstName, lastName, type, cpr, bankId)).build();
+			return Response.ok(service.register(firstName, lastName, type, cpr, bankId).toString()).build();
 		} catch (AccountAlreadyExists e) {
 			return Response.status(409).entity(cpr).build();
 		} catch (Exception e) {
