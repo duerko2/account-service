@@ -1,6 +1,9 @@
-package account.service;
+package account.service.aggregate;
 
-public class Payment {
+import java.io.Serializable;
+
+public class Payment implements Serializable {
+    private static final long serialVersionUID = -1650614046686330604L;
     int amount;
     String merchantId;
     String customerId;

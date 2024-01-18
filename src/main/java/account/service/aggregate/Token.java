@@ -1,6 +1,9 @@
-package account.service;
+package account.service.aggregate;
 
-public class Token {
+import java.io.Serializable;
+
+public class Token implements Serializable {
+    private static final long serialVersionUID = 7873796962475638382L;
     String rfid;
     public Token() {
     }
