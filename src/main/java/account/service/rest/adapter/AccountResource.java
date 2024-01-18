@@ -45,4 +45,20 @@ public class AccountResource {
 		service.deleteAccount(accountId);
 		return Response.ok().build();
 	}
+	@Path("/{accountId}/tokens")
+	@GET
+	@Produces("application/json")
+	public Response getTokens(@PathParam("accountId") String accountId) {
+		//List<Token> tokens = service.getTokens(accountId).join();
+		return Response.ok().build();
+	}
+	@Path("/{accountId}/tokens")
+	@POST
+	@Consumes("text/plain")
+	@Produces("application/json")
+	public Response newTokens(@PathParam("accountId") String accountId, String amount) {
+		//service.generateNewTokens(accountId, Integer.parseInt(amount));
+		//List<Token> tokens = service.getTokens(accountId).join();
+		return Response.ok().build();
+	}
 }
