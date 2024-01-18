@@ -3,4 +3,12 @@ services:
   account-service:
     image: account-service
     build: .
- 
+    container_name: account-service
+    ports:
+      - "8080:8080"
+    networks:
+      - system-test_dtupay-network
+
+networks:
+  system-test_dtupay-network:
+    external: true
