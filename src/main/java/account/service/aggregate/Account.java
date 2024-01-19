@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 @AggregateRoot
 @Entity
 @Getter
-public class Account implements Serializable {
+public class   Account implements Serializable {
 
 	private static final long serialVersionUID = 9023222981284806610L;
 	private String name;
