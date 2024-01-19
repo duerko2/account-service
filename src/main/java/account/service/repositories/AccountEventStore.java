@@ -4,7 +4,7 @@ import account.service.aggregate.AccountId;
 import account.service.events.*;
 
 import lombok.NonNull;
-import messaging.MessageQueue;
+import message.MessageQueue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +15,9 @@ import java.util.stream.Stream;
 public class AccountEventStore {
     private Map<AccountId, List<Event>> store = new ConcurrentHashMap<>();
 
-    private MessageQueue eventBus;
+    private QueueTranslator eventBus;
 
-    public AccountEventStore(MessageQueue eventBus) {
+    public AccountEventStore(QueueTranslator eventBus) {
         this.eventBus = eventBus;
     }
 

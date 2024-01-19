@@ -1,7 +1,7 @@
 package behaviourtests;
 
-import messaging.Message;
-import messaging.MessageQueue;
+import message.Message;
+import message.MessageQueue;
 
 import java.util.function.Consumer;
 

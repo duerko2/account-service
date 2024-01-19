@@ -4,13 +4,10 @@ import account.service.aggregate.AccountId;
 import account.service.aggregate.AccountType;
 import account.service.events.AccountCreated;
 import account.service.events.AccountDeleted;
-import messaging.MessageQueue;
 import org.jmolecules.ddd.annotation.Repository;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Repository
 public class AccountReadRepo {
@@ -21,7 +18,7 @@ public class AccountReadRepo {
     private Map<AccountId, AccountType> accountTypes = new ConcurrentHashMap<>();
 
 
-    public AccountReadRepo(MessageQueue eventQueue) {
+    public AccountReadRepo(QueueTranslator eventQueue) {
         eventQueue.addHandler(AccountCreated.class, e -> {
             apply((AccountCreated) e);
         });

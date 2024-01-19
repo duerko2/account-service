@@ -19,14 +19,17 @@ import account.service.events.TokensAssigned;
 import account.service.events.TokensRequested;
 import account.service.repositories.AccountReadRepo;
 import account.service.repositories.AccountRepo;
+import account.service.repositories.QueueTranslator;
 import account.service.service.AccountAlreadyExists;
 import account.service.service.AccountService;
+import com.google.gson.internal.LinkedTreeMap;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import messaging.Message;
-import messaging.MessageQueue;
+import message.Message;
+import messaging.Event;
+import org.junit.jupiter.api.Assertions;
 
 public class AccountRegistrationSteps {
 
@@ -35,18 +38,18 @@ public class AccountRegistrationSteps {
 	private AccountService service;
 	private Account account;
 	private AccountId accountId;
-	private List<Message> publishedEvent = new ArrayList<>();
+	private List<Event> publishedEvent = new ArrayList<>();
+	private QueueTranslator queueTranslator;
 
-
-	private MessageQueue q = new MessageQueue() {
+	private messaging.MessageQueue q = new messaging.MessageQueue(){
 
 		@Override
-		public void publish(Message event) {
+		public void publish(Event event) {
 			publishedEvent.add(event);
 		}
 
 		@Override
-		public void addHandler(Class<? extends Message> eventType, Consumer<Message> handler) {
+		public void addHandler(String eventType, Consumer<Event> handler) {
 		}
 
 	};
@@ -55,17 +58,13 @@ public class AccountRegistrationSteps {
 
 	@Before
 	public void setup(){
-		AccountRepo accountRepo = new AccountRepo(q);
-		AccountReadRepo accountReadRepo = new AccountReadRepo(q);
-		service = new AccountService(q,accountRepo,accountReadRepo);
+		queueTranslator = new QueueTranslator(q);
+		AccountRepo accountRepo = new AccountRepo(queueTranslator);
+		AccountReadRepo accountReadRepo = new AccountReadRepo(queueTranslator);
+		service = new AccountService(queueTranslator,accountRepo,accountReadRepo);
 
 	}
-//	@Given("there is an account with empty id")
-//	public void thereIsAnAccountWithEmptyId() throws AccountAlreadyExists {
-//		accountId = service.register("Test","testing",new AccountType("Customer"),"cpr123123");
-//		account = service.getAccount(accountId);
-//		assertNull(account.getAccountId());
-//	}
+
 
 	@When("the account is being registered")
 	public void theAccountIsBeingRegistered() {
@@ -83,10 +82,18 @@ public class AccountRegistrationSteps {
 
 	@Then("the tokensRequestedEvent event is sent")
 	public void theEventIsSent() {
-		var tokensRequestedEvent = publishedEvent.stream().filter(e ->
-			TokensRequested.class.isAssignableFrom(e.getClass()) && ((TokensRequested)e).getAccountId().equals(accountId)
-		).collect(Collectors.toList());
-		assertFalse(tokensRequestedEvent.isEmpty());
+		TokensRequested tokenEvent = null;
+		for (Event event : publishedEvent){
+			if(event.getType().equals(TokensRequested.class.getSimpleName())){
+				var dto = event.getArgument(0, TokensRequested.class);
+				if(dto.getAccountId().equals(accountId)){
+					tokenEvent = (TokensRequested) dto;
+				}
+			}
+
+
+		}
+		Assertions.assertFalse(tokenEvent == null);
 
 	}
 	@When("the TokensAssigned event is sent with a list of {int} tokens")

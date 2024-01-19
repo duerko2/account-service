@@ -9,7 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 import lombok.Setter;
-import messaging.Message;
+import message.Message;
 import org.jboss.resteasy.annotations.providers.jaxb.IgnoreMediaTypes;
 import org.jmolecules.ddd.annotation.AggregateRoot;
 import org.jmolecules.ddd.annotation.Entity;

@@ -2,7 +2,7 @@ package account.service.events;
 
 import account.service.aggregate.AccountId;
 import lombok.Getter;
-import messaging.Message;
+import message.Message;
 
 import java.io.Serializable;
 
@@ -16,5 +16,6 @@ public abstract class Event implements Message, Serializable {
 	private final long version = versionCount++;
 			
     public abstract AccountId getAccountId();
+	public Object dtoObject;
 
 }

@@ -2,9 +2,10 @@ package account.service.rest.adapter;
 
 import account.service.repositories.AccountReadRepo;
 import account.service.repositories.AccountRepo;
+import account.service.repositories.QueueTranslator;
 import account.service.service.AccountService;
+import message.implementations.MessageQueueAsync;
 import messaging.MessageQueue;
-import messaging.implementations.MessageQueueAsync;
 import messaging.implementations.RabbitMqQueue;
 
 public class AccountServiceFactory {
@@ -12,21 +13,26 @@ public class AccountServiceFactory {
 	static AccountReadRepo accountReadRepo = null;
 
 	static AccountRepo accountRepo = null;
-	private final MessageQueue mq =  new RabbitMqQueue("rabbitMq","event");
+
+	static QueueTranslator queueTranslator;
+	private final MessageQueue mq =  new RabbitMqQueue("rabbitMq");
 
 
 	public synchronized AccountService getService(){
 		if (service != null) {
 			return service;
 		}
+		if(queueTranslator == null){
+			queueTranslator = new QueueTranslator(mq);
+		}
 		if(accountReadRepo == null)
 		{
-			accountReadRepo = new AccountReadRepo(mq);
+			accountReadRepo = new AccountReadRepo(queueTranslator);
 		}if(accountRepo == null)
 		{
-			accountRepo = new AccountRepo(mq);
+			accountRepo = new AccountRepo(queueTranslator);
 		}
-		service = new AccountService(mq,accountRepo,accountReadRepo);
+		service = new AccountService(queueTranslator,accountRepo,accountReadRepo);
 		System.out.printf("RabbitMQ created");
 		return service;
 	}

@@ -7,19 +7,19 @@ import account.service.aggregate.Token;
 import account.service.events.*;
 import account.service.repositories.AccountReadRepo;
 import account.service.repositories.AccountRepo;
-import io.cucumber.messages.internal.com.google.common.base.Joiner;
-import messaging.MessageQueue;
+import account.service.repositories.QueueTranslator;
+import message.MessageQueue;
 
 import java.util.List;
 
 public class AccountService {
 
-	private MessageQueue queue;
+	private QueueTranslator queue;
 
 	AccountRepo accountRepo;
 	AccountReadRepo accountReadRepo;
 	
-	public AccountService(MessageQueue q,AccountRepo accountRepo,AccountReadRepo accountReadRepo) {
+	public AccountService(QueueTranslator q, AccountRepo accountRepo, AccountReadRepo accountReadRepo) {
 		queue = q;
 		this.accountRepo = accountRepo;
 		this.accountReadRepo = accountReadRepo;
