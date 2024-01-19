@@ -2,8 +2,7 @@ package account.service;
 
 public class Token {
     String rfid;
-    public Token() {
-    }
+    public Token() {}
     public Token(String rfid) {
         this.rfid = rfid;
     }
