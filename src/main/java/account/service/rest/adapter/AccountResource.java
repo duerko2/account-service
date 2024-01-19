@@ -7,6 +7,12 @@ import account.service.Account;
 import account.service.AccountAlreadyExists;
 import account.service.AccountService;
 
+
+/**
+ * @Author: Marcus Jacobsen
+ * Pair programming with Alexander Elsing
+ * Based on code from Hubert Baumeister
+ */
 @Path("/accounts")
 public class AccountResource {
 

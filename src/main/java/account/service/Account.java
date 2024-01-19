@@ -3,7 +3,10 @@ package account.service;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @Author: Rasmus Bo Thomsen
+ * Mob programming, all members
+ */
 public class Account implements Serializable {
 
 	private static final long serialVersionUID = 9023222981284806610L;

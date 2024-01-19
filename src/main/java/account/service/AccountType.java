@@ -1,5 +1,8 @@
 package account.service;
-
+/**
+ * @Author: Nikolaj Beier
+ * Mob programming, all members
+ */
 public class AccountType {
     public String type;
     public AccountType() {

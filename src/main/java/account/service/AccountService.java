@@ -5,7 +5,10 @@ import java.util.concurrent.CompletableFuture;
 import messaging.Event;
 import messaging.MessageQueue;
 import java.util.UUID;
-
+/**
+ * @Author: Marcus Jacobsen
+ * Mob programming, all members
+ */
 public class AccountService {
 
 	private MessageQueue queue;

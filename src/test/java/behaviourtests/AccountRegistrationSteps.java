@@ -17,6 +17,11 @@ import io.cucumber.java.en.When;
 import messaging.Event;
 import messaging.MessageQueue;
 
+/**
+ * @Author: Marcus Jacobsen
+ * Pair programming with Alexander Elsing
+ * Based on code from Hubert Baumeister
+ */
 public class AccountRegistrationSteps {
 
 	private CompletableFuture<Event> publishedEvent = new CompletableFuture<>();

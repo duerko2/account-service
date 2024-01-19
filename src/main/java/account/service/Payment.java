@@ -1,5 +1,8 @@
 package account.service;
-
+/**
+ * @Author: Alex Batten
+ * Mob programming, all members
+ */
 public class Payment {
     int amount;
     String merchantId;

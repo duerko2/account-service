@@ -1,7 +1,10 @@
 package account.service;
 
 import java.io.Serializable;
-
+/**
+ * @Author: Andreas Aagaard
+ * Mob programming, all members
+ */
 public class Student implements Serializable{
 	
 	private static final long serialVersionUID = 9023222981284806610L;

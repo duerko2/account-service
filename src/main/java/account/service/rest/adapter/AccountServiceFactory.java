@@ -4,6 +4,11 @@ import account.service.AccountService;
 import messaging.MessageQueue;
 import messaging.implementations.RabbitMqQueue;
 
+/**
+ * @Author: Marcus Jacobsen
+ * Pair programming with Alexander Elsing
+ * Based on code from Hubert Baumeister
+ */
 public class AccountServiceFactory {
 	static AccountService service = null;
 
