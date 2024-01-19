@@ -1,7 +1,10 @@
 package account.service.aggregate;
 
 import java.io.Serializable;
-
+/**
+ * @Author: Alex Batten
+ * Mob programming, all members
+ */
 public class Payment implements Serializable {
     private static final long serialVersionUID = -1650614046686330604L;
     int amount;

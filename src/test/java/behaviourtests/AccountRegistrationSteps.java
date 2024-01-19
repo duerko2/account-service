@@ -30,6 +30,11 @@ import message.implementations.MessageQueueSync;
 import messaging.Event;
 import org.junit.jupiter.api.Assertions;
 
+/**
+ * @Author: Marcus Jacobsen
+ * Pair programming with Alexander Elsing
+ * Based on code from Hubert Baumeister
+ */
 public class AccountRegistrationSteps {
 
 

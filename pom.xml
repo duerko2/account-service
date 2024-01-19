@@ -137,6 +137,11 @@
 			<version>b849c5b615</version>
 		</dependency>
 		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-smallrye-openapi</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.github.NikolajBeier</groupId>
 			<artifactId>messaging-utilities</artifactId>
 			<version>2ff374cc49</version>

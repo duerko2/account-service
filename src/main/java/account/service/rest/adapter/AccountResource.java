@@ -15,6 +15,12 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
+
+/**
+ * @Author: Marcus Jacobsen
+ * Pair programming with Alexander Elsing
+ * Based on code from Hubert Baumeister
+ */
 @Path("/accounts")
 public class AccountResource {
 

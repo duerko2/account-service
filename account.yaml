@@ -1,0 +1,73 @@
+---
+openapi: 3.0.3
+info:
+  title: Account API
+  version: "1.0"
+paths:
+  /accounts:
+    post:
+      requestBody:
+        description: "Create account "
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        "200":
+          description: OK
+  /accounts/{accountId}:
+    get:
+      parameters:
+      - name: accountId
+        description: "Get account with specific id"
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+    delete:
+      parameters:
+      - name: accountId
+        description: "delete a specific account with id"
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    Token:
+      type: object
+      properties:
+        rfid:
+          type: string
+    ListToken:
+      type: array
+      items:
+        $ref: '#/components/schemas/Token'
+    AccountType:
+      type: object
+      properties:
+        type:
+          type: string
+    Account:
+      type: object
+      properties:
+        accountId:
+          type: string
+        bankId:
+          type: string
+        cpr:
+          type: string
+        lastname:
+          type: string
+        name:
+          type: string
+        tokens:
+          $ref: '#/components/schemas/ListToken'
+        type:
+          $ref: '#/components/schemas/AccountType'
