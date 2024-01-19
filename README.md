@@ -35,11 +35,11 @@ DTUPay
 
 ### Links to the repositories
 * [Account Service](https://github.com/duerko2/account-service)
-* [Bank Service](https://github.com/duerko2/account-service)
-* [Payment Service](https://github.com/duerko2/account-service)
-* [Reporting Service](https://github.com/duerko2/account-service)
-* [Token Service](https://github.com/duerko2/account-service)
-* [System Test](https://github.com/duerko2/account-service)
+* [Bank Service](https://github.com/duerko2/bank-service)
+* [Payment Service](https://github.com/duerko2/payment-service)
+* [Reporting Service](https://github.com/duerko2/reporting-service)
+* [Token Service](https://github.com/duerko2/token-service)
+* [System Test](https://github.com/duerko2/system-test)
 
 
 ### Troubleshooting
