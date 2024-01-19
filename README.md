@@ -29,9 +29,8 @@ DTUPay
 ├── bank-service
 ├── payment-service
 ├── reporting-service
-├── system-test
 ├── token-service 
-└── local_run_and_test.sh
+└── system-test
 ```
 
 ### Links to the repositories
