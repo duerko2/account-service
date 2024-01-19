@@ -100,7 +100,7 @@ public class AccountRegistrationSteps {
 		}
 		TokensAssigned tokensAssignedEvent = new TokensAssigned(accountId,tokens);
 
-		service.handleInitialTokensAssigned(tokensAssignedEvent);
+		service.handleTokensAssigned(tokensAssignedEvent);
 	}
 
 	@Then("the account is registered and his id is set and has {int} tokens")

@@ -4,6 +4,7 @@ import account.service.repositories.AccountReadRepo;
 import account.service.repositories.AccountRepo;
 import account.service.service.AccountService;
 import messaging.MessageQueue;
+import messaging.implementations.MessageQueueAsync;
 import messaging.implementations.RabbitMqQueue;
 
 public class AccountServiceFactory {
@@ -11,7 +12,7 @@ public class AccountServiceFactory {
 	static AccountReadRepo accountReadRepo = null;
 
 	static AccountRepo accountRepo = null;
-	private final MessageQueue mq = new RabbitMqQueue("rabbitMq","topic");
+	private final MessageQueue mq =  new RabbitMqQueue("rabbitMq","event");
 
 
 	public synchronized AccountService getService(){

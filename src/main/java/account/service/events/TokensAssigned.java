@@ -15,6 +15,4 @@ public class TokensAssigned extends Event{
     private static final long serialVersionUID = -654639399553909420L;
     private AccountId accountId;
     private Set<Token> accountTokens;
-
-
 }

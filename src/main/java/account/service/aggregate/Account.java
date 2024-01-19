@@ -1,6 +1,7 @@
 package account.service.aggregate;
 
 import account.service.events.AccountCreated;
+import account.service.events.AccountDeleted;
 import account.service.events.AccountTokenAdded;
 import account.service.events.Event;
 import io.netty.util.internal.shaded.org.jctools.queues.MessagePassingQueue;
@@ -9,9 +10,11 @@ import lombok.Getter;
 
 import lombok.Setter;
 import messaging.Message;
+import org.jboss.resteasy.annotations.providers.jaxb.IgnoreMediaTypes;
 import org.jmolecules.ddd.annotation.AggregateRoot;
 import org.jmolecules.ddd.annotation.Entity;
 
+import javax.json.bind.annotation.JsonbTransient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +40,7 @@ public class   Account implements Serializable {
 	private String bankId;
 	Set<Token> tokens = new HashSet<>();
 
+	@JsonbTransient
 	private Map<Class<? extends Message>, MessagePassingQueue.Consumer<Message>> handlers = new HashMap<>();
 
 
@@ -79,8 +83,10 @@ public class   Account implements Serializable {
 	private void registerEventHandlers() {
 		handlers.put(AccountCreated.class, e -> apply((AccountCreated) e));
 		handlers.put(AccountTokenAdded.class, e -> apply((AccountTokenAdded) e));
-
 	}
+
+
+
 	public void clearAppliedEvents() {
 		appliedEvents.clear();
 	}

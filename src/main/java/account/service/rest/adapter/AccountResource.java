@@ -3,12 +3,17 @@ package account.service.rest.adapter;
 import account.service.aggregate.Account;
 import account.service.aggregate.AccountId;
 import account.service.aggregate.AccountType;
+import account.service.aggregate.Token;
 import account.service.service.AccountAlreadyExists;
 import account.service.service.AccountService;
+import com.google.gson.Gson;
 import io.cucumber.java.en_old.Ac;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.UUID;
 
 @Path("/accounts")
@@ -21,11 +26,11 @@ public class AccountResource {
 	@POST
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response registerAccount(String firstName, String lastName, AccountType type, String cpr,String bankId) {
+	public Response registerAccount(AccountDTO account) {
 		try {
-			return Response.ok(service.register(firstName, lastName, type, cpr, bankId).toString()).build();
+			return Response.ok(service.register(account.getName(), account.getLastName(),new AccountType(account.getType()),account.getCpr(),account.getBankId()).toString()).build();
 		} catch (AccountAlreadyExists e) {
-			return Response.status(409).entity(cpr).build();
+			return Response.status(409).entity(account.getCpr()).build();
 		} catch (Exception e) {
 			return Response.status(500).build();
 		}
@@ -36,8 +41,10 @@ public class AccountResource {
 	public Response getAccount(@PathParam("accountId") String accountId) {
 
 		Account account = service.getAccount(new AccountId(UUID.fromString(accountId)));
+		AccountDTO accountDTO = new AccountDTO(account.getAccountId().getUuid().toString(),account.getName(),account.getLastname(),account.getType().getType(),account.getCpr(),account.getBankId());
+
 		if (account != null) {
-			return Response.ok(account).build();
+			return Response.ok(accountDTO).build();
 		} else {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
@@ -54,8 +61,8 @@ public class AccountResource {
 	@GET
 	@Produces("application/json")
 	public Response getTokens(@PathParam("accountId") String accountId) {
-		//List<Token> tokens = service.getTokens(accountId).join();
-		return Response.ok().build();
+		List<Token> tokens = service.getTokens(new AccountId(UUID.fromString(accountId)));
+		return Response.ok(tokens).build();
 	}
 	@Path("/{accountId}/tokens")
 	@POST
@@ -66,4 +73,7 @@ public class AccountResource {
 		//List<Token> tokens = service.getTokens(accountId).join();
 		return Response.ok().build();
 	}
+
+
 }
+

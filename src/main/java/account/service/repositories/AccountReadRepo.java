@@ -9,14 +9,16 @@ import org.jmolecules.ddd.annotation.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Repository
 public class AccountReadRepo {
 
-    private Map<AccountId, String> cprSet = new HashMap<>();
-    private Map<AccountId, String> bankIds = new HashMap<>();
+    private Map<AccountId, String> cprSet = new ConcurrentHashMap<>();
+    private Map<AccountId, String> bankIds = new ConcurrentHashMap<>();
 
-    private Map<AccountId, AccountType> accountTypes = new HashMap<>();
+    private Map<AccountId, AccountType> accountTypes = new ConcurrentHashMap<>();
 
 
     public AccountReadRepo(MessageQueue eventQueue) {
@@ -29,6 +31,9 @@ public class AccountReadRepo {
     }
 
     public boolean accountExists(String cpr){
+        // print all cpr in the map
+        cprSet.values().forEach(System.out::println);
+        System.out.println("The cpr we are looking for: " + cpr);
         return cprSet.containsValue(cpr);
     }
 
@@ -42,6 +47,5 @@ public class AccountReadRepo {
         cprSet.remove(event.getAccountId());
         accountTypes.remove(event.getAccountId());
         bankIds.remove(event.getAccountId());
-
     }
 }

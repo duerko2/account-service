@@ -22,6 +22,7 @@ public class AccountEventStore {
     }
 
     public void addEvent(AccountId id, Event event) {
+
         if (!store.containsKey(event.getAccountId())) {
             store.put(event.getAccountId(), new ArrayList<Event>());
         }
