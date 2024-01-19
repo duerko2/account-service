@@ -43,7 +43,7 @@ DTUPay
 
 
 ### Troubleshooting
-If you cannot run the build.sh script, ensure that the script is runnable by running the following command
+If you cannot run the build.sh script, ensure that the script is runnable by running the following command (assuming you are in the account-service directory)
 ```Bash
 chmod +x build.sh
 ```
