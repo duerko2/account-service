@@ -1,6 +1,6 @@
-# Account-Service
+# Account Service
 
-The Account Service is a microservice in the DTUPay system responsible for managin user accounts.
+The Account Service is a microservice in the DTUPay system responsible for managing user accounts.
 
 ## Requirements
 To run the service locally, ensure that you have the proper dependencies installed
