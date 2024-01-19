@@ -130,7 +130,7 @@
 			<groupId>com.github.NikolajBeier</groupId>
 			<artifactId>message-utilities</artifactId>
 			<version>1803d626e0</version>
-	</dependency>
+		</dependency>
 		<dependency>
 			<groupId>com.github.NikolajBeier</groupId>
 			<artifactId>messaging-utilities</artifactId>

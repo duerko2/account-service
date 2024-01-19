@@ -41,7 +41,6 @@ public class AccountService {
 
 
 
-
 	public void handleInitialTokensAssigned(TokensAssigned e) {
 		Account account = accountRepo.getAccount(e.getAccountId());
 		account.UpdateAccountTokens(e.getAccountTokens());
