@@ -4,10 +4,7 @@ import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -28,6 +25,8 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import message.Message;
+import message.MessageQueue;
+import message.implementations.MessageQueueSync;
 import messaging.Event;
 import org.junit.jupiter.api.Assertions;
 
@@ -39,7 +38,7 @@ public class AccountRegistrationSteps {
 	private Account account;
 	private AccountId accountId;
 	private List<Event> publishedEvent = new ArrayList<>();
-	private QueueTranslator queueTranslator;
+	private MessageQueue queue = new MessageQueueSync();
 
 	private messaging.MessageQueue q = new messaging.MessageQueue(){
 
@@ -58,10 +57,9 @@ public class AccountRegistrationSteps {
 
 	@Before
 	public void setup(){
-		queueTranslator = new QueueTranslator(q);
-		AccountRepo accountRepo = new AccountRepo(queueTranslator);
-		AccountReadRepo accountReadRepo = new AccountReadRepo(queueTranslator);
-		service = new AccountService(queueTranslator,accountRepo,accountReadRepo);
+		AccountRepo accountRepo = new AccountRepo(queue);
+		AccountReadRepo accountReadRepo = new AccountReadRepo(queue);
+		service = new AccountService(queue,q,accountRepo,accountReadRepo);
 
 	}
 
@@ -82,32 +80,21 @@ public class AccountRegistrationSteps {
 
 	@Then("the tokensRequestedEvent event is sent")
 	public void theEventIsSent() {
-		TokensRequested tokenEvent = null;
-		for (Event event : publishedEvent){
-			if(event.getType().equals(TokensRequested.class.getSimpleName())){
-				var dto = event.getArgument(0, TokensRequested.class);
-				if(dto.getAccountId().equals(accountId)){
-					tokenEvent = (TokensRequested) dto;
-				}
-			}
-
-
-		}
-		Assertions.assertFalse(tokenEvent == null);
+		var events = publishedEvent.stream().filter(e-> e.getType().equals("InitialTokensRequested")).collect(Collectors.toList());
+		Assertions.assertFalse(events.isEmpty());
 
 	}
 	@When("the TokensAssigned event is sent with a list of {int} tokens")
 	public void theEventIsSentWithNonEmptyId( Integer int1) {
 		// This step simulate the event created by a downstream service.
 
-		Set<Token> tokens = new HashSet<>();
+		List<Token> tokens = new ArrayList<>();
 		// adds 6 tokens to list
 		for(int i = 0; i < int1; i++) {
-			tokens.add(new Token(""));
+			tokens.add(new Token(UUID.randomUUID().toString()));
 		}
-		TokensAssigned tokensAssignedEvent = new TokensAssigned(accountId,tokens);
-
-		service.handleTokensAssigned(tokensAssignedEvent);
+		Event event = new Event("InitialTokensAssigned",new Object[]{accountId.toString(),tokens});
+		service.handleTokensAssigned(event);
 	}
 
 	@Then("the account is registered and his id is set and has {int} tokens")

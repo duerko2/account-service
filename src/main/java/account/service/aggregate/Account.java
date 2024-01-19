@@ -38,7 +38,7 @@ public class   Account implements Serializable {
 	private String cpr;
 	private AccountId accountId;
 	private String bankId;
-	Set<Token> tokens = new HashSet<>();
+	private Set<Token> tokens = new HashSet<>();
 
 	@JsonbTransient
 	private Map<Class<? extends Message>, MessagePassingQueue.Consumer<Message>> handlers = new HashMap<>();
@@ -49,7 +49,7 @@ public class   Account implements Serializable {
 
 	public static Account createAccount(String firstName, String lastName,AccountType type, String cpr,String bankId) {
 		var accountID = new AccountId(UUID.randomUUID());
-		AccountCreated event = new AccountCreated(accountID, firstName, lastName,type,cpr);
+		AccountCreated event = new AccountCreated(accountID, firstName, lastName,type,cpr,bankId);
 		var account = new Account();
 		account.accountId = accountID;
 		account.appliedEvents.add(event);
@@ -97,9 +97,11 @@ public class   Account implements Serializable {
 		lastname = event.getLastname();
 		cpr = event.getCpr();
 		type = event.getType();
+		bankId = event.getBankId();
 	}
 
 	private void apply(AccountTokenAdded event){
+		System.out.printf("Token added total:" + tokens.size());
 		tokens.add(event.getToken());
 	}
 

@@ -18,5 +18,6 @@ public class AccountCreated extends Event{
     private String lastname;
     private AccountType type;
     private String cpr;
+    private String bankId;
 
 }

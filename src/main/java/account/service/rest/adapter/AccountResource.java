@@ -68,8 +68,7 @@ public class AccountResource {
 	@Consumes("text/plain")
 	@Produces("application/json")
 	public Response newTokens(@PathParam("accountId") String accountId, String amount) {
-		//service.generateNewTokens(accountId, Integer.parseInt(amount));
-		//List<Token> tokens = service.getTokens(accountId).join();
+		service.generateTokens(accountId, Integer.parseInt(amount));
 		return Response.ok().build();
 	}
 

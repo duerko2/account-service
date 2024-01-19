@@ -16,7 +16,7 @@ public class AccountRepo {
 
     AccountEventStore eventStore;
 
-    public AccountRepo(QueueTranslator bus) {
+    public AccountRepo(MessageQueue bus) {
         this.eventStore = new AccountEventStore(bus);
     }
 
@@ -33,6 +33,7 @@ public class AccountRepo {
     }
     public void deleteAccount(AccountId accountId) {
        eventStore.addEvent(accountId,new AccountDeleted(accountId));
+       eventStore.deleteAccount(accountId);
     }
 
     public List<Token> getTokens(AccountId accountId) {

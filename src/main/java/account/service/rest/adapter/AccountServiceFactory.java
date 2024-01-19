@@ -7,6 +7,7 @@ import account.service.service.AccountService;
 import message.implementations.MessageQueueAsync;
 import messaging.MessageQueue;
 import messaging.implementations.RabbitMqQueue;
+import message.implementations.MessageQueueAsync;
 
 public class AccountServiceFactory {
 	static AccountService service = null;
@@ -14,25 +15,23 @@ public class AccountServiceFactory {
 
 	static AccountRepo accountRepo = null;
 
-	static QueueTranslator queueTranslator;
 	private final MessageQueue mq =  new RabbitMqQueue("rabbitMq");
+	private final message.MessageQueue localQue = new MessageQueueAsync();
 
 
 	public synchronized AccountService getService(){
 		if (service != null) {
 			return service;
 		}
-		if(queueTranslator == null){
-			queueTranslator = new QueueTranslator(mq);
-		}
+
 		if(accountReadRepo == null)
 		{
-			accountReadRepo = new AccountReadRepo(queueTranslator);
+			accountReadRepo = new AccountReadRepo(localQue);
 		}if(accountRepo == null)
 		{
-			accountRepo = new AccountRepo(queueTranslator);
+			accountRepo = new AccountRepo(localQue);
 		}
-		service = new AccountService(queueTranslator,accountRepo,accountReadRepo);
+		service = new AccountService(localQue,mq,accountRepo,accountReadRepo);
 		System.out.printf("RabbitMQ created");
 		return service;
 	}

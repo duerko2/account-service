@@ -4,6 +4,8 @@ import account.service.aggregate.AccountId;
 import account.service.aggregate.AccountType;
 import account.service.events.AccountCreated;
 import account.service.events.AccountDeleted;
+import account.service.events.AccountTokenAdded;
+import message.MessageQueue;
 import org.jmolecules.ddd.annotation.Repository;
 
 import java.util.Map;
@@ -18,7 +20,7 @@ public class AccountReadRepo {
     private Map<AccountId, AccountType> accountTypes = new ConcurrentHashMap<>();
 
 
-    public AccountReadRepo(QueueTranslator eventQueue) {
+    public AccountReadRepo(message.MessageQueue eventQueue) {
         eventQueue.addHandler(AccountCreated.class, e -> {
             apply((AccountCreated) e);
         });
@@ -39,6 +41,8 @@ public class AccountReadRepo {
         cprSet.put(event.getAccountId(),event.getCpr());
         accountTypes.put(event.getAccountId(),event.getType());
     }
+
+
 
     public void apply(AccountDeleted event){
         cprSet.remove(event.getAccountId());
